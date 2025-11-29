@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manga Flow</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+        header {
+            text-align: center;
+            padding: 20px;
+        }
+        .manga-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            padding: 10px;
+            overflow-y: auto;
+            max-height: 85vh;
+        }
+        .manga-item {
+            background-color: #1E1E1E;
+            padding: 10px;
+            border-radius: 5px;
+            transition: transform 0.2s;
+        }
+        .manga-item:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Manga Flow</h1>
+        <p>Explore your favorite manga with infinite scroll!</p>
+    </header>
+    <div class="manga-container">
+        <!-- Manga items will be dynamically injected here -->
+    </div>
+    <script>
+        // JavaScript for infinite scroll functionality
+        const container = document.querySelector('.manga-container');
+        let page = 1;
+
+        function loadManga() {
+            fetch(`https://api.example.com/manga?page=${page}`)  // Example API
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(manga => {
+                        const item = document.createElement('div');
+                        item.className = 'manga-item';
+                        item.innerHTML = `<h3>${manga.title}</h3><img src='${manga.cover}' alt='${manga.title}' />`;
+                        container.appendChild(item);
+                    });
+                    page++;
+                });
+        }
+
+        window.addEventListener('scroll', () => {
+            if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+                loadManga();
+            }
+        });
+
+        loadManga();  // Initial load
+    </script>
+</body>
+</html>
